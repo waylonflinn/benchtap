@@ -14,7 +14,14 @@ function Benchtap(){
 
 module.exports = Benchtap;
 
-Benchtap.prototype.add = function(name, N, setup, test){
+/*
+	setup - function containing setup code
+		allocate data, create data structures, etc.
+	test - function containing test code
+	ops - function calculating number of operations run in the test (for flops)
+
+ */
+Benchtap.prototype.add = function(name, setup, test, ops){
 
 	var self = this;
 
@@ -33,9 +40,10 @@ Benchtap.prototype.add = function(name, N, setup, test){
 					mu = '\xb5'
 					size = benchmark.stats.sample.length;
 
-				var mflops = benchmark.hz * N / 1e6;
+				var flops = benchmark.hz * ops;
+				flopsString = getFlopsString(flops);
 
-				var info = Benchmark.formatNumber(mflops.toFixed(3)) + ' MFlops/sec ' +
+				var info = flopsString +
 					' ' + pm + benchmark.stats.rme.toFixed(2) + '% ' +
 					' n = ' + size +
 					' ' + mu + " = " + (benchmark.stats.mean * 1000).toFixed(0) + 'ms';
@@ -46,6 +54,22 @@ Benchtap.prototype.add = function(name, N, setup, test){
 		});
 
 	this.suite.add(b);
+}
+
+var SI_PREFIXES = ["", "k", "M", "G", "T", "P", "E"];
+
+function getFlopsString(flops){
+
+	// what tier
+	var tier = Math.log10(flops) / 3 | 0;
+	var prefix = SI_PREFIXES[tier];
+	var scale = Math.pow(10, tier * 3);
+
+	var scaled = flops / scale;
+
+	// Benchmark.formatNumber(adjusted.toFixed(3)) + ' ' + prefix + 'Flops/sec '
+
+	return scaled.toFixed(3) + ' ' + prefix + 'Flops/sec';
 }
 
 Benchtap.prototype.run = function(){
