@@ -22,6 +22,8 @@ benchtap.run();
 
 ## command line
 
+put all your benchmarks in a `benchmarks` folder, then run:
+
 ```shell
 browserify benchmark/*.js | testling -x $npm_config_browser
 ```
