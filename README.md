@@ -4,9 +4,9 @@ Simple, accurate benchmarking in a browser with tap output
 
 # usage
 
-## example
+## code
 
-```
+```javascript
 var Benchtap = require('benchtap');
 
 var benchtap = new Benchtap();
@@ -16,7 +16,9 @@ benchtap.run();
 
 ## command line
 
-`browserify benchmark/*.js | testling -x $npm_config_browser`
+```shell
+browserify benchmark/*.js | testling -x $npm_config_browser
+```
 
 # setup
 
