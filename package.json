@@ -1,0 +1,26 @@
+{
+  "name": "benchtap",
+  "version": "0.8.0",
+  "description": "Simple, accurate benchmarking in a browser with tap output",
+  "main": "benchtap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waylonflinn/benchtap.git"
+  },
+  "keywords": [
+    "benchmark",
+    "benchmarking",
+    "browser",
+    "tap",
+    "testling"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/waylonflinn/benchtap/issues"
+  },
+  "homepage": "https://github.com/waylonflinn/benchtap#readme",
+}
