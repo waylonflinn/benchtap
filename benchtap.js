@@ -2,7 +2,7 @@ var Benchmark = require('benchmark');
 
 /* Run benchmarks with tap output, compatible with testling and browserify
  */
-function Benchtap(){
+function Benchtap(verbose){
 	this.suite = new Benchmark.Suite();
 	this.pass = 0;
 	this.fail = 0;
@@ -10,6 +10,7 @@ function Benchtap(){
 	this.suite.on('complete', function(){
 		printFooter(self.suite.length, self.pass, self.fail);
 	});
+	this.verbose = verbose;
 }
 
 module.exports = Benchtap;
@@ -46,7 +47,14 @@ Benchtap.prototype.add = function(name, setup, test, ops){
 				var info = flopsString +
 					' ' + pm + benchmark.stats.rme.toFixed(2) + '% ' +
 					' n = ' + size +
-					' ' + mu + " = " + (benchmark.stats.mean * 1000).toFixed(0) + 'ms';
+					' ' + mu + " = " + (benchmark.stats.mean * 1000).toFixed(0) + 'ms'
+
+				// flagged to run verbose?
+				if(self.verbose){
+					// yes, add the actual samples
+					// _~*
+					info += ' : [' + benchmark.stats.sample + ']';
+				}
 
 				printPass(event.currentTarget.id, benchmark.name, info);
 				self.pass++;
@@ -75,7 +83,7 @@ function getFlopsString(flops){
 Benchtap.prototype.run = function(){
 	printHeader();
 
-	this.suite.run({ 'async': true });
+	this.suite.run({ 'async': true});
 }
 
 function printHeader(){
