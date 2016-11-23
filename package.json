@@ -25,6 +25,7 @@
   "homepage": "https://github.com/waylonflinn/benchtap#readme",
   "dependencies": {
     "benchmark": "^1.0.0",
-    "microtime": "^2.0.0"
+    "microtime": "^2.0.0",
+    "tape": "^4.6.3"
   }
 }

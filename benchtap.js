@@ -1,4 +1,26 @@
-var Benchmark = require('benchmark');
+var Benchmark = require('benchmark'),
+	createResult = require('tape/lib/results'),
+	createDefaultStream = require('tape/lib/default_stream');
+
+var results = createResult();
+var stream = results.createStream();
+stream.pipe(createDefaultStream());
+function write(s) { results._stream.queue(s) };
+
+var canEmitExit = typeof process !== 'undefined' && process
+	&& typeof process.on === 'function' && process.browser !== true
+
+if(canEmitExit){
+	process.on('exit', function (code) {
+		// let the process exit cleanly.
+		if (code !== 0) return;
+
+		results.close();
+		process.exit(code); //  || harness._exitCode
+	});
+} else {
+	results.once('done', function () { results.close() });
+}
 
 /* Run benchmarks with tap output, compatible with testling and browserify
  */
@@ -8,7 +30,8 @@ function Benchtap(verbose){
 	this.fail = 0;
 	var self = this;
 	this.suite.on('complete', function(){
-		printFooter(self.suite.length, self.pass, self.fail);
+		results.pass += self.pass;
+		results.fail += self.fail;
 	});
 	this.verbose = verbose;
 }
@@ -98,11 +121,17 @@ function getFlopsString(flops){
 }
 
 Benchtap.prototype.run = function(){
-	printHeader();
+	/*
+	if(!harness.running){
+		harness.running = true;
+		printHeader();
+	}*/
+	results.count += this.suite.length;
 
 	this.suite.run({ 'async': true});
 }
 
+/*
 function printHeader(){
 	console.log("TAP version 13");
 }
@@ -118,16 +147,17 @@ function printFooter(total, pass, fail){
 	else
 		console.log("\n# ok\n");
 }
+*/
 
 function printError(id, name, error){
-	console.log("not ok " + id + " " + name);
+	write("not ok " + id + " " + name + "\n");
 	// show error
-	console.log("  ---");
-	console.log("  error: " + error);
-	console.log("  ...");
+	write("  ---\n");
+	write("  error: " + error + "\n");
+	write("  ...\n");
 }
 
 function printPass(id, name, info){
-	console.log("ok " + id + " " + name);
-	console.log("# " + info);
+	write("ok " + id + " " + name + "\n");
+	write("# " + info + "\n");
 }
