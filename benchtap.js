@@ -15,6 +15,9 @@ function Benchtap(verbose){
 
 module.exports = Benchtap;
 
+// the percentage deviation to consider statistically significant
+Benchtap.SIGNIFICANT_ERROR = .3;
+
 /*
 	setup - function containing setup code
 		allocate data, create data structures, etc.
@@ -51,9 +54,23 @@ Benchtap.prototype.add = function(name, setup, test, ops){
 
 				// flagged to run verbose?
 				if(self.verbose){
-					// yes, add the actual samples
-					// _~*
-					info += ' : [' + benchmark.stats.sample + ']';
+					// show concise graphical representation
+					info += ' : ' + benchmark.stats.sample.map(function(s){
+						var error = (s - benchmark.stats.mean);
+						var threshold = Benchtap.SIGNIFICANT_ERROR*benchmark.stats.mean;
+						if(error < -threshold){
+							return ".";
+						} else if(error > threshold){
+							return "*"
+						}
+
+						return "-";
+					}).join('');
+
+					// higher verbosity level?
+					if(self.verbose > 1){
+						info += '\n# [' + benchmark.stats.sample + ']';
+					}
 				}
 
 				printPass(event.currentTarget.id, benchmark.name, info);
