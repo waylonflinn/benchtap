@@ -1,23 +1,20 @@
 # benchtap
 
-Simple, accurate benchmarking in a browser with tap output
+Simple, accurate benchmarking in a browser with tap output and in interface based on tape
 
 # usage
 
 ## code
 
 ```javascript
-var Benchtap = require('benchtap');
-
-var benchtap = new Benchtap();
+var benchtap = require('benchtap');
 
 var name = "square";
 var setup = function(){ this.a = Math.random() };
 var test = function(){ this.a * this.a };
 var ops = 1; // number of operations performed in `test`
 
-benchtap.add(name, setup, test, ops);
-benchtap.run();
+benchtap(name, {"operations" : ops}, setup, test);
 ```
 
 ## command line
