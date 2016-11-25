@@ -1,6 +1,6 @@
 # benchtap
 
-Simple, accurate benchmarking in a browser with tap output and in interface based on tape
+Simple, accurate benchmarking in a browser with tap output and an interface based on tape.
 
 # usage
 
