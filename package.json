@@ -1,6 +1,6 @@
 {
   "name": "benchtap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple, accurate benchmarking in a browser with tap output",
   "main": "benchtap.js",
   "scripts": {
